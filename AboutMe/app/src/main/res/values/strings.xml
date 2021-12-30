@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">AboutMe</string>
+    <string name="first_activity">Pradyumna YM</string>
+    <string name="avatar_image">Avatar Image</string>
+    <string name="lorem">Lorem ipsum dolor seit Lorem ipsum dolor seitLorem ipsum dolor seitLorem
+        ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem
+        ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem
+        ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem
+        ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seit
+        Lorem ipsum dolor seit Lorem ipsum dolor seitLorem ipsum dolor seitLorem
+        ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem
+        ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem
+        ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem
+        ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seitLorem ipsum dolor seit</string>
+    <string name="enter_your_nickname">Enter your Nickname</string>
+    <string name="done">Done</string>
+</resources>
