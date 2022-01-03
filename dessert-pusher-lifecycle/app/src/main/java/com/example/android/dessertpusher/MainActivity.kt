@@ -16,8 +16,10 @@
 
 package com.example.android.dessertpusher
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -26,11 +28,13 @@ import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import com.example.android.dessertpusher.databinding.ActivityMainBinding
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     private var revenue = 0
     private var dessertsSold = 0
+    private lateinit var timer : DessertTimer
 
     // Contains all the views
     private lateinit var binding: ActivityMainBinding
@@ -63,7 +67,14 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
     private var currentDessert = allDesserts[0]
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        Timber.i("onCreate called!!")
         super.onCreate(savedInstanceState)
+
+        if(savedInstanceState != null) {
+            revenue = savedInstanceState.getInt("revenue")
+            dessertsSold = savedInstanceState.getInt("desserts_sold")
+        }
 
         // Use Data Binding to get reference to the views
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -78,7 +89,48 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
         // Make sure the correct dessert is showing
         binding.dessertButton.setImageResource(currentDessert.imageId)
+
+        timer = DessertTimer(this.lifecycle)
     }
+
+    override fun onStart() {
+        Timber.i("onStart called!")
+        // timer.startTimer()
+        super.onStart()
+    }
+
+    override fun onResume() {
+        Timber.i("onResume called!")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Timber.i("onPause called!")
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        Timber.i("onDestroy called!")
+        super.onDestroy()
+    }
+
+    override fun onRestart() {
+        Timber.i("onRestart called!")
+        super.onRestart()
+    }
+
+    override fun onStop() {
+        Timber.i("onStop called!")
+        // timer.stopTimer()
+        super.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt("revenue" , revenue)
+        outState.putInt("desserts_sold", dessertsSold)
+        //super.onSaveInstanceState(outState)
+    }
+
 
     /**
      * Updates the score when the dessert is clicked. Possibly shows a new dessert.
@@ -118,6 +170,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
             binding.dessertButton.setImageResource(newDessert.imageId)
         }
     }
+
 
     /**
      * Menu methods
