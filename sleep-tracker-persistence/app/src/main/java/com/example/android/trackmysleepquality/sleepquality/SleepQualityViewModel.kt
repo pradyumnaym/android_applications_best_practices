@@ -18,11 +18,31 @@ package com.example.android.trackmysleepquality.sleepquality
 
 import android.app.Application
 import android.content.Context
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.*
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SleepQualityViewModel(
     private val sleepDatabase: SleepDatabaseDao,
-    application: Application) : AndroidViewModel(application) {
+    private val sleepNightKey: Long = 0L) : ViewModel() {
+    private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
+    val navigateToSleepTracker: LiveData<Boolean?>
+        get() = _navigateToSleepTracker
 
+    fun onSetSleepQuality(quality: Int){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val tonight = sleepDatabase.get(sleepNightKey) ?: return@withContext
+                tonight.sleepQuality = quality
+                sleepDatabase.update(tonight)
+            }
+            _navigateToSleepTracker.value = true
+        }
+    }
+
+    fun doneNavigating(){
+        _navigateToSleepTracker.value = false
+    }
 }

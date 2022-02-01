@@ -17,13 +17,18 @@
 package com.example.android.trackmysleepquality.sleeptracker
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.android.trackmysleepquality.R
+import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * A fragment with buttons to record start and end times for sleep, which are saved in
@@ -31,6 +36,8 @@ import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerB
  * (Because we have not learned about RecyclerView yet.)
  */
 class SleepTrackerFragment : Fragment() {
+
+    private lateinit var viewModel: SleepTrackerViewModel
 
     /**
      * Called when the Fragment is ready to display content to the screen.
@@ -43,6 +50,52 @@ class SleepTrackerFragment : Fragment() {
         // Get a reference to the binding object and inflate the fragment views.
         val binding: FragmentSleepTrackerBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_sleep_tracker, container, false)
+
+        val application = requireNotNull(activity).application
+        val dataSource = SleepDatabase.getInstance(application).sleepDatabaseDao
+        var viewModelFactory = SleepTrackerViewModelFactory(dataSource, application)
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(SleepTrackerViewModel::class.java)
+        viewModel.initializeTonight()
+
+        binding.viewModel = viewModel
+
+        viewModel.nightsString.observe(viewLifecycleOwner, {
+            binding.textview.text = it.toString()
+        })
+
+        viewModel.stopped.observe(viewLifecycleOwner, {
+            //Log.d("sleeptrackerFragment", "here!!!")
+            if(it!=null){
+                this.findNavController().navigate(
+                    SleepTrackerFragmentDirections.actionSleepTrackerFragmentToSleepQualityFragment(it.nightId)
+                )
+                viewModel.doneNavigating()
+            }
+        })
+
+        viewModel.startVisible.observe(viewLifecycleOwner) {
+            binding.startButton.isEnabled = it
+        }
+
+        viewModel.stopVisible.observe(viewLifecycleOwner) {
+            binding.stopButton.isEnabled = it
+        }
+
+        viewModel.clearVisible.observe(viewLifecycleOwner) {
+            binding.clearButton.isEnabled = it
+        }
+
+        viewModel.clearEvent.observe(viewLifecycleOwner) {
+            if(it==true){
+                Snackbar.make(
+                    activity!!.findViewById(android.R.id.content),
+                    getString(R.string.cleared_message),
+                    Snackbar.LENGTH_SHORT // How long to display the message.
+                ).show()
+                viewModel.doneSnackBar()
+            }
+        }
 
         return binding.root
     }

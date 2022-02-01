@@ -24,10 +24,10 @@ import java.lang.IllegalArgumentException
 
 class SleepQualityViewModelFactory(
     private val sleepDatabase: SleepDatabaseDao,
-    private val application: Application ) : ViewModelProvider.Factory {
+    private val sleepNightKey: Long ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(SleepQualityViewModel::class.java)){
-            return SleepQualityViewModel(sleepDatabase, application) as T
+            return SleepQualityViewModel(sleepDatabase, sleepNightKey) as T
         }
         throw IllegalArgumentException("he argument is not assignable from SleepQVM!!")
     }
