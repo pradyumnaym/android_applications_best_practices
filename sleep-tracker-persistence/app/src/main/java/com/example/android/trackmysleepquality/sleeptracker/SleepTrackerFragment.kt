@@ -57,7 +57,7 @@ class SleepTrackerFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(SleepTrackerViewModel::class.java)
         viewModel.initializeTonight()
-
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         viewModel.nightsString.observe(viewLifecycleOwner, {
@@ -74,17 +74,17 @@ class SleepTrackerFragment : Fragment() {
             }
         })
 
-        viewModel.startVisible.observe(viewLifecycleOwner) {
-            binding.startButton.isEnabled = it
-        }
-
-        viewModel.stopVisible.observe(viewLifecycleOwner) {
-            binding.stopButton.isEnabled = it
-        }
-
-        viewModel.clearVisible.observe(viewLifecycleOwner) {
-            binding.clearButton.isEnabled = it
-        }
+//        viewModel.startVisible.observe(viewLifecycleOwner) {
+//            binding.startButton.isEnabled = it
+//        }
+//
+//        viewModel.stopVisible.observe(viewLifecycleOwner) {
+//            binding.stopButton.isEnabled = it
+//        }
+//
+//        viewModel.clearVisible.observe(viewLifecycleOwner) {
+//            binding.clearButton.isEnabled = it
+//        }
 
         viewModel.clearEvent.observe(viewLifecycleOwner) {
             if(it==true){
