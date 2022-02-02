@@ -22,19 +22,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.example.android.marsrealestate.databinding.FragmentDetailBinding
+import com.example.android.marsrealestate.network.MarsProperty
 
 /**
  * This [Fragment] will show the detailed information about a selected piece of Mars real estate.
  */
 class DetailFragment : Fragment() {
+    private val args: DetailFragmentArgs by navArgs()
+    private lateinit var viewModel : DetailViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        @Suppress("UNUSED_VARIABLE")
         val application = requireNotNull(activity).application
+        val marsProperty = args.marsProperty
+        val viewModelFactory = DetailViewModelFactory(marsProperty, application)
+        val viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(DetailViewModel::class.java)
+
         val binding = FragmentDetailBinding.inflate(inflater)
         binding.lifecycleOwner = this
+        binding.viewModel = viewModel
         return binding.root
     }
 }
